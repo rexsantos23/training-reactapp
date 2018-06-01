@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
+import BookItems from './BookItems'
 import bookData from '../../../../data/books.json'
 import authorData from '../../../../data/authors.json'
 
 class BookList extends Component {
-
+ 
     constructor(){
         super()
         this.state = {
             hasDataLoaded: false,
             books: [],
+            authors: [],
             error: ''
         }
     }
@@ -31,14 +34,39 @@ class BookList extends Component {
                 })
             })
     }
+
+    getData = () => {
+
+        const books = () => axios.get('./../../../data/books.json')
+        const authors = () => axios.get('./../../../data/authors.json')
+
+        axios
+            .all([books(), authors()])
+            .then(axios.spread((books,authors) => {
+
+                this.setState({
+                    hasDataLoaded: true,
+                    books: books.data.books,
+                    authors: authors.data.authors
+                })
+            }))
+    }
+
+    getAuthorName = id => {
+        const { authors } = this.state
+        const author = authors.find(author => author.id === parseInt(id))
+        
+        return author.name 
+    }
+
     componentDidMount() {
         setTimeout(() => {
-            this.getBooks()
+            this.getData()
         },2000)
     }
 
     render() {
-        const { books, hasDataLoaded, error } = this.state
+        const { books, authors, hasDataLoaded, error } = this.state
         if(!hasDataLoaded){
             return "Loading book list....."
         }
@@ -50,24 +78,14 @@ class BookList extends Component {
                 <h1 className="title">Top 100 Books</h1>
                 <ul className="book-list columns is-multiline">
                     {
-                        books.books.map(book => {
+                        books.map(book => {
                             return (
-                                <li key={book.id}
-                                    className="column is-one-quarter boo-item"
-                                 >
-                                    <div className="card">
-                                        <div className="card-content">
-                                            <div className="content">
-                                                <Link to={`/book/${book.id}`}>
-                                                    { book.title }
-                                                </Link>
-                                            </div>
-                                            <span className="is-size-7">
-                                                    by: {book.authorId}
-                                                </span>
-                                        </div>
-                                    </div>
-                                 </li>
+                               <BookItems 
+                                    key={book.id}
+                                    book={book}
+                                    author={this.getAuthorName(book.authorId)}
+                                >
+                                </BookItems>
                             )
                         })
                     }

@@ -1,7 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component, createContext } from 'react'
 import ErrorBoundary from './ErrorBoundary';
 
 import { HashRouter } from 'react-router-dom'
+
+import { Provider as UserContextProvider } from './utils/providers/UserContext'
+import { Provider as ThemeContextProvider } from './utils/providers/ThemeContext'
 
 import Header from './layout/Header'
 import Main from './layout/Main'
@@ -30,13 +33,17 @@ class App extends Component{
 
 		return (
 			<HashRouter>
-				<div className="container">
-					<Header />
-					<ErrorBoundary>
-						<Main food="Squirel"/>
-					</ErrorBoundary>
-					<Footer />
-				</div>
+				{/* <ThemeContextProvider>
+					<UserContextProvider> */}
+						<div className="container">
+							<Header />
+							<ErrorBoundary>
+								<Main food="Squirel"/>
+							</ErrorBoundary>
+							<Footer />
+						</div>
+					{/* </UserContextProvider>
+				</ThemeContextProvider> */}
 			</HashRouter>
 		)
 	} 

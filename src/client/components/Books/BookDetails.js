@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 class BookDetails extends Component {
 
@@ -62,7 +63,7 @@ class BookDetails extends Component {
         },2000)
     }
 
- 
+    
     render() {
 
         const { book,author, hasDataLoaded, error } = this.state
@@ -76,7 +77,7 @@ class BookDetails extends Component {
             <div>
                 <p className="is-text-6">Viewing current book:</p>
                 <h1 className="title">Title: {book.title}</h1>
-                <p className="subtitle">Author: {author}</p>
+                <p className="subtitle">Author: <Link to={`/author/${book.authorId}`}>{author}</Link></p>
                 <hr />
                 <p>{book.summary}</p>
             </div>
