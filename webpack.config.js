@@ -1,5 +1,5 @@
-import path from 'path' //path from node
-import HtmlWebpackplugin from 'html-webpack-plugin'
+const path = require('path') //path from node
+const HtmlWebpackplugin = require('html-webpack-plugin')
 
 module.exports = {
     entry: './src/client/index.js',
@@ -10,8 +10,11 @@ module.exports = {
     module: {
         rules: [
             {
-                text: /\.js$/,
+                test: /\.js$/,
                 exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader'
+                }
             },
             {
                 test: /\.css$/,
